@@ -1,7 +1,8 @@
 "use client"
 
+
 import React, { useState, useEffect } from 'react';
-import { Client, Databases } from 'appwrite';
+import { Client, Databases, Query } from 'appwrite';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@clerk/nextjs';
 
@@ -20,16 +21,52 @@ const Messages = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await databases.listDocuments(
-          '668ff318000fda4f53d0', // Your database ID
-          '668ff31e003b76a23957', // Your collection ID
-          [], // Empty array means fetch all documents
-          100, // Limit to 100 documents, adjust as needed
-          0, // Skip none (start from the beginning)
-          'ASC', // Sort ascending
-          'userid' // Sort by userid field
+        // Fetch messages where current user is either sender or receiver
+        const messagesResponse = await databases.listDocuments(
+          '668ff318000fda4f53d0', // Your messages database ID
+          '6690ce20001ff3ea2abc', // Your messages collection ID
+          {
+            filters: [
+              ['$or', [
+                ['$eq', ['senderId', userId]],
+                ['$eq', ['receiverId', userId]]
+              ]]
+            ],
+            limit: 100, // Limit to 100 messages, adjust as needed
+            offset: 0, // Start from the beginning
+            orderField: 'timestamp', // Sort by timestamp field
+            orderType: 'ASC' // Sort ascending by default
+          }
         );
-        setUsers(response.documents);
+
+        // Extract unique user IDs from messages
+        const uniqueUserIds = new Set();
+        messagesResponse.documents.forEach(message => {
+          if (message.senderId !== userId) {
+            uniqueUserIds.add(message.senderId);
+          }
+          if (message.receiverId !== userId) {
+            uniqueUserIds.add(message.receiverId);
+          }
+        });
+
+        // Fetch user details for each unique user ID
+        const userIdsArray = Array.from(uniqueUserIds);
+        const usersResponse = await databases.listDocuments(
+          '668ff318000fda4f53d0', // Your users database ID
+          '668ff31e003b76a23957', // Your users collection ID
+          {
+            filters: [
+              ['$in', ['userid', userIdsArray]]
+            ],
+            limit: userIdsArray.length, // Limit to the number of unique user IDs
+            offset: 0, // Start from the beginning
+            orderField: 'userid', // Sort by userid field
+            orderType: 'ASC' // Sort ascending by default
+          }
+        );
+
+        setUsers(usersResponse.documents);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -38,17 +75,16 @@ const Messages = () => {
     };
 
     fetchUsers();
-  }, []);
+  }, [userId]); // Ensure useEffect runs whenever userId changes
 
   const handleUserClick = async (receiverId) => {
     try {
       const userDocument = await databases.getDocument(
-        '668ff318000fda4f53d0', // Your database ID
-        '668ff31e003b76a23957', // Your collection ID
+        '668ff318000fda4f53d0', // Your users database ID
+        '668ff31e003b76a23957', // Your users collection ID
         receiverId // Document ID of the clicked user
       );
-      
-      
+
       const clickedUserId = userDocument.userid;
 
       if (userId) {
@@ -67,7 +103,7 @@ const Messages = () => {
 
   return (
     <div>
-      <h2>All Users</h2>
+      <h2>Users with Messages</h2>
       <div className="">
         {users.map((user) => (
           <div key={user.$id} className="flex items-center" onClick={() => handleUserClick(user.$id)}>

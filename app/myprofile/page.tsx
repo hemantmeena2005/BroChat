@@ -108,7 +108,7 @@ const Profile = () => {
                 ))}
               </div>
             ) : (
-              <p className="mt-4">You haven't created any posts yet.</p>
+              <p className="mt-4">You havent created any posts yet.</p>
             )}
           </>
         )}
