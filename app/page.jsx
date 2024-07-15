@@ -1,9 +1,12 @@
-"use client"
+'use client';
+
 import React, { useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation'; // Corrected import
+import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
-import { Client, Databases, ID, Query } from 'appwrite'; // Corrected import
+import { Client, Databases, ID, Query } from 'appwrite';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const client = new Client()
   .setEndpoint('https://cloud.appwrite.io/v1')
@@ -41,6 +44,7 @@ export default function Home() {
                 // Add any additional fields you want to store
               }
             );
+            toast.success('User profile created successfully');
             console.log('User created in DB:', response);
           } else {
             console.log('User already exists in DB:', existingUsers.documents[0]);
@@ -48,6 +52,7 @@ export default function Home() {
 
           // Redirect to dashboard or another page upon successful sign-in
         } catch (error) {
+          toast.error('Error creating user profile');
           console.error('Error creating user in DB:', error);
         }
       }
@@ -58,20 +63,37 @@ export default function Home() {
 
   return (
     <div className="flex flex-col -mt-10 items-center justify-center h-screen">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold leading-tight">
-          Talk to strangers, <br />
-          Make friends!
-        </h1>
-        <p className="mt-4 text-lg">
-          Experience a random chat alternative to find <br /> friends, connect with people, and chat with <br /> strangers from all over the world!
-        </p>
-      </div>
-      <Link href="/">
-        <p className="bg-blue-500 mt-2 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out">
-          Sign Up
-        </p>
-      </Link>
+      {isSignedIn ? (
+        <div className="text-center">
+          <h1 className="text-4xl font-bold leading-tight">
+            Welcome back, {user.firstName}!
+          </h1>
+          <p className="mt-4 text-lg">
+            We are glad to see you again. Start chatting with your friends now.
+          </p>
+          <Link href="/home">
+            <p className="bg-blue-500 mt-2 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out">
+              Go to Home
+            </p>
+          </Link>
+        </div>
+      ) : (
+        <div className="text-center">
+          <h1 className="text-4xl font-bold leading-tight">
+            Talk to strangers, <br />
+            Make friends!
+          </h1>
+          <p className="mt-4 text-lg">
+            Experience a random chat alternative to find <br /> friends, connect with people, and chat with <br /> strangers from all over the world!
+          </p>
+          <Link href="/sign-up">
+            <p className="bg-blue-500 mt-2 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out">
+              Sign Up
+            </p>
+          </Link>
+        </div>
+      )}
+      <ToastContainer />
     </div>
   );
 }

@@ -84,7 +84,7 @@ const Home = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto my-8 p-4">
+    <div className="max-w-4xl mx-auto my-8 lg:px-20 ">
       <h1 className="text-3xl font-bold mb-6">Home</h1>
       {loading ? (
         <div className="flex justify-center items-center h-screen">
