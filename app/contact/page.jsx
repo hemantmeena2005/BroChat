@@ -72,16 +72,16 @@ const Contact = () => {
         <form ref={formRef} onSubmit={sendEmail}>
           <p className="text-lg">Contact me:</p>
           <div className="mt-4">
-            <label htmlFor="name" className="block mb-2">Your Name:</label>
-            <input type="text" id="name" name="name" className="w-full px-3 py-2 rounded  border-2 border-blue-500  focus:outline-none" required />
+            <label htmlFor="name" className="block   mb-2">Your Name:</label>
+            <input type="text" id="name" name="name" className="w-full bg-inherit px-3 py-2 rounded  border-2 border-blue-500   focus:outline-none" required />
           </div>
           <div className="mt-4">
             <label htmlFor="email" className="block mb-2">Your Email:</label>
-            <input type="email" id="email" name="email" className="w-full px-3 py-2 rounded  border-2 border-blue-500 focus:outline-none" required />
+            <input type="email" id="email" name="email" className="w-full bg-inherit px-3 py-2 rounded  border-2 border-blue-500 focus:outline-none" required />
           </div>
           <div className="mt-4">
             <label htmlFor="message" className="block mb-2">Message:</label>
-            <textarea id="message" name="message" rows="4" className="w-full px-3 py-2 rounded  border-2 border-blue-500 focus:outline-none" required></textarea>
+            <textarea id="message" name="message" rows="4" className="w-full bg-inherit px-3 py-2 rounded  border-2 border-blue-500 focus:outline-none" required></textarea>
           </div>
           <div className="mt-6">
             <button type="submit" className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded text-white focus:outline-none">Send Message</button>

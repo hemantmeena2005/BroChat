@@ -50,11 +50,17 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
 
           {/* Sidebar */}
           <div className={`fixed inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col gap-6 w-64 p-10 ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-200 text-gray-800'} z-40`}>
-            <div className='flex items-center'>
-              <h1 className='text-3xl font-bold'><Link href={'/'} legacyBehavior ><a onClick={closeSidebar}>BroChat</a></Link></h1>
+            <div className='flex  flex-col gap-2 '>
+              <h1 className='text-3xl mt-4 mb-4 hover:scale-110 hover:text-blue-500 '><Link href={'/'} legacyBehavior ><a onClick={closeSidebar}>BroChat</a></Link></h1>
+              <h1 className='text-xl hover:scale-110 hover:text-blue-500 '><Link href={'/home'} legacyBehavior ><a onClick={closeSidebar}>Home</a></Link></h1>
+              <h1 className='text-xl hover:scale-110 hover:text-blue-500 '><Link href={'/messages'} legacyBehavior ><a onClick={closeSidebar}>Inbox</a></Link></h1>
+              <h1 className='text-xl hover:scale-110 hover:text-blue-500 '><Link href={'/myprofile'} legacyBehavior ><a onClick={closeSidebar}>My profile</a></Link></h1>
+              <h1 className='text-xl hover:scale-110 hover:text-blue-500 '><Link href={'/search'} legacyBehavior ><a onClick={closeSidebar}>Search</a></Link></h1>
+              <h1 className='text-xl hover:scale-110 hover:text-blue-500 '><Link href={'/post'} legacyBehavior ><a onClick={closeSidebar}>Add post</a></Link></h1>
+              <h1 className='text-xl hover:scale-110 hover:text-blue-500 '><Link href={'/about'} legacyBehavior ><a onClick={closeSidebar}>About Us</a></Link></h1>
+              <h1 className='text-xl hover:scale-110 hover:text-blue-500 '><Link href={'/contact'} legacyBehavior ><a onClick={closeSidebar}>Contact</a></Link></h1>
             </div>
             <div className='mt-6 flex flex-col gap-3'>
-              <Sidebar  />
             </div>
           </div>
 
@@ -67,7 +73,9 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
               </SignedOut>
               <SignedIn>
                 <div className='text-xl flex gap-3 items-center'>
+                  <div className='h-10 mb-1 ' >
                   <Hello />
+                  </div>
                   <UserButton />
                 </div>
               </SignedIn>
