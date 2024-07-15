@@ -54,7 +54,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
               <h1 className='text-3xl font-bold'><Link href={'/'} legacyBehavior ><a onClick={closeSidebar}>BroChat</a></Link></h1>
             </div>
             <div className='mt-6 flex flex-col gap-3'>
-              <Sidebar />
+              <Sidebar  />
             </div>
           </div>
 
