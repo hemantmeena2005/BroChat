@@ -67,7 +67,7 @@ export default function Home() {
           Experience a random chat alternative to find <br /> friends, connect with people, and chat with <br /> strangers from all over the world!
         </p>
       </div>
-      <Link href="/random-chat">
+      <Link href="/">
         <p className="bg-blue-500 mt-2 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out">
           Sign Up
         </p>

@@ -1,20 +1,21 @@
-"use client"
+'use client';
+
 import React, { useState } from 'react';
-import { Client, Databases, ID, Storage } from "appwrite";
+import { Client, Databases, ID, Storage } from 'appwrite';
 import { useAuth } from '@clerk/nextjs';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useUser } from '@clerk/nextjs';
+
 const client = new Client()
-    .setEndpoint('https://cloud.appwrite.io/v1')
-    .setProject('668ff2cf00156a440de2');
+  .setEndpoint('https://cloud.appwrite.io/v1')
+  .setProject('668ff2cf00156a440de2');
 
 const databases = new Databases(client);
 const storage = new Storage(client);
 
 const Post = () => {
-    const {user} = useUser();
-
+  const { user } = useUser();
   const { userId } = useAuth();
   const [title, setTitle] = useState('');
   const [caption, setCaption] = useState('');
@@ -45,12 +46,13 @@ const Post = () => {
         '66908cea0038d0660be5', // Collection ID
         ID.unique(),
         {
-          name:user.username,
-          userimg:user.imageUrl,
+          name: user.username,
+          userimg: user.imageUrl,
           user: userId,
           title: title,
           caption: caption,
           imageUrl: imageUrl,
+          time: new Date().toISOString() // Add the current timestamp
         }
       );
 
@@ -67,9 +69,11 @@ const Post = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto my-8 p-6  rounded-lg shadow-md">
+    <div className="max-w-md mx-auto my-8 p-6 rounded-lg shadow-md">
       <h1 className="text-2xl font-bold mb-4">Create Post</h1>
-      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">Post Title</label>
+      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
+        Post Title
+      </label>
       <input
         type="text"
         id="title"
@@ -77,7 +81,9 @@ const Post = () => {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="caption">Post Caption</label>
+      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="caption">
+        Post Caption
+      </label>
       <input
         type="text"
         id="caption"
@@ -85,7 +91,9 @@ const Post = () => {
         value={caption}
         onChange={(e) => setCaption(e.target.value)}
       />
-      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">Upload Image</label>
+      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
+        Upload Image
+      </label>
       <input
         type="file"
         id="image"

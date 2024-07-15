@@ -55,7 +55,7 @@ const Profile = ({params}) => {
         <div className='ml-4'>
           <h1 className="text-3xl font-bold mb-1">Profile: {user.name}</h1>
           <p className="text-gray-600">Username: {user.name}</p>
-          <Link href={`/messages`}>Message</Link>
+          <Link href={`/message/${user.user}`}>Message</Link>
           {/* Add more fields as per your user data structure */}
           
         </div>

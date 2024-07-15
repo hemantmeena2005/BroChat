@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from 'react';
 import { Client, Databases, Query } from 'appwrite';
@@ -10,41 +10,43 @@ const client = new Client()
 
 const databases = new Databases(client);
 
-export default function Message({ params }: { params: { id: string } }) {
+export default function Message({ params }) {
   const { userId } = useAuth();
-  const [receiverId, senderId] = decodeURIComponent(params.id).split('&').map(param => param.split('=')[1]);
+  const receiverId = params.id;
+  
   const [messages, setMessages] = useState([]);
   const [messageContent, setMessageContent] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
+  const senderId = userId;
 
   useEffect(() => {
     fetchMessages();
-  }, [receiverId]);
+  }, [receiverId, senderId]);
 
   const fetchMessages = async () => {
-  try {
-    const response = await databases.listDocuments(
-      '668ff318000fda4f53d0',
-      '6690ce20001ff3ea2abc',
-      [
-        Query.or([
-          Query.and([
-            Query.equal('senderId', senderId),
-            Query.equal('receiverId', receiverId)
+    try {
+      const response = await databases.listDocuments(
+        '668ff318000fda4f53d0',
+        '6690ce20001ff3ea2abc',
+        [
+          Query.or([
+            Query.and([
+              Query.equal('senderId', senderId),
+              Query.equal('receiverId', receiverId)
+            ]),
+            Query.and([
+              Query.equal('senderId', receiverId),
+              Query.equal('receiverId', senderId)
+            ])
           ]),
-          Query.and([
-            Query.equal('senderId', receiverId),
-            Query.equal('receiverId', senderId)
-          ])
-        ]),
-        Query.orderAsc('timestamp')
-      ]
-    );
-    setMessages(response.documents);
-  } catch (error) {
-    console.error('Error fetching messages:', error);
-  }
-};
+          Query.orderAsc('timestamp')
+        ]
+      );
+      setMessages(response.documents);
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  };
 
   const sendMessage = async () => {
     if (!messageContent.trim()) return;
@@ -62,10 +64,16 @@ export default function Message({ params }: { params: { id: string } }) {
         }
       );
       setMessageContent('');
-      fetchMessages(); // Fetch messages again after sending a new message
+      fetchMessages();
     } catch (error) {
       console.error('Error sending message:', error);
       setErrorMessage('Error sending message.');
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
     }
   };
 
@@ -88,6 +96,7 @@ export default function Message({ params }: { params: { id: string } }) {
           type='text'
           value={messageContent}
           onChange={(e) => setMessageContent(e.target.value)}
+          onKeyDown={handleKeyDown}
           className="flex-1 rounded-lg border border-gray-300 p-2 mr-2"
         />
         <button onClick={sendMessage} className="bg-green-500 text-white px-4 py-2 rounded-lg">Send</button>
