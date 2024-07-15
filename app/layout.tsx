@@ -1,5 +1,4 @@
 'use client';
-
 import React, { ReactNode, useState } from 'react';
 import Link from 'next/link';
 import { FaMoon, FaSun, FaBars } from 'react-icons/fa'; // Importing necessary icons
@@ -32,6 +31,11 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  // Close sidebar when a link is clicked
+  const closeSidebar = () => {
+    setSidebarOpen(false);
+  };
+
   return (
     <ClerkProvider>
       <html lang="en">
@@ -47,7 +51,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
           {/* Sidebar */}
           <div className={`fixed inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col gap-6 w-64 p-10 ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-200 text-gray-800'} z-40`}>
             <div className='flex items-center'>
-              <h1 className='text-3xl font-bold'><Link href={'/'}>BroChat</Link></h1>
+              <h1 className='text-3xl font-bold'><Link href={'/'} legacyBehavior ><a onClick={closeSidebar}>BroChat</a></Link></h1>
             </div>
             <div className='mt-6 flex flex-col gap-3'>
               <Sidebar />
@@ -70,7 +74,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
             </div>
 
             {/* Children Content */}
-            <div className='flex justify-center w-full py-20 m-auto'>
+            <div className='flex justify-center w-full h-screen py-20  m-auto'>
               {children}
             </div>
           </div>
